@@ -8,32 +8,38 @@ const songsSlice = createSlice({
       state.push(action.payload)
     },
     removeSong(state, action) {
-      //
+      // action.payload doit être égal à l'enregistrement à supprimer uhe chane de caractère
+      const index = state.indexOf(action.payload);
+      // Supprimer l'index correspondant dans le state
+      state.splice(index, 1);
     }
   }
 });
 
-console.log(songsSlice, 'songsSlice');
+const moviesSlice = createSlice({
+  name: "movies",
+  initialState: [],
+  reducers: {
+    addMovie(state, action) {
+      state.push(action.payload);
+    },
+    removeMovie(state, action) {
+      const index = state.indexOf(action.payload);
+      state.splice(index, 1);
+    },
+    reset(state, action) {
+      return [];
+    }
+  },
+});
 
 const store = configureStore({
   reducer: {
-    songs: songsSlice.reducer
+    songs: songsSlice.reducer,
+    movies: moviesSlice.reducer,
   }
 });
 
-// console.log(store, 'store');
-const startingState = store.getState();
-
-console.log(startingState, 'startingState');
-
-store.dispatch({
-  type: 'songs/addSong',
-  payload: 'New song',
-});
-
-store.dispatch(
-  songsSlice.actions.addSong('Billy')
-)
-
-const afterHydrateStore = store.getState();
-console.log(afterHydrateStore, 'afterHydrateStore');
+export { store };
+export const { addSong, removeSong } = songsSlice.actions;
+export const { addMovie, removeMovie, reset } = moviesSlice.actions;
